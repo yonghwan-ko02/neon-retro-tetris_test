@@ -137,15 +137,22 @@ h1 {
 
 .game-selection {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
   width: 100%;
+}
+
+@media (max-width: 900px) {
+  .game-selection {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
 }
 
 @media (max-width: 640px) {
   .game-selection {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
   }
 }
 
@@ -747,3 +754,34 @@ footer a:hover {
   text-decoration: underline;
   opacity: 0.8;
 }
+
+/* --- NEON BREAKER CUSTOM STYLING --- */
+.game-card.breaker-card::before {
+  background: linear-gradient(90deg, var(--color-l), var(--color-o));
+}
+
+.game-card.breaker-card .card-icon {
+  color: var(--color-l);
+  text-shadow: 0 0 20px rgba(255, 123, 0, 0.4);
+}
+
+.game-card.breaker-card .card-title {
+  background: linear-gradient(135deg, var(--color-l), var(--color-o));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.game-card.breaker-card:hover {
+  box-shadow: 0 15px 35px rgba(255, 123, 0, 0.2), 0 0 20px rgba(255, 123, 0, 0.1);
+}
+
+.game-card.breaker-card .card-btn {
+  background: rgba(255, 123, 0, 0.15);
+  border: 1px solid rgba(255, 123, 0, 0.3);
+}
+
+.game-card.breaker-card:hover .card-btn {
+  background: linear-gradient(135deg, var(--color-l), var(--color-o));
+  box-shadow: 0 4px 15px rgba(255, 123, 0, 0.4);
+}
+

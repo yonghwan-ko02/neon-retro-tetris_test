@@ -44,6 +44,15 @@
           <p class="card-desc">크롬 공룡 게임에서 영감을 받아 제작된 러너 게임입니다. 장애물을 뛰어넘거나 수그려 회피하며, 시간이 갈수록 빠르게 다가오는 긴장감을 만끽해 보세요.</p>
           <button class="card-btn">Play Now</button>
         </div>
+
+        <!-- Breaker Selection Card -->
+        <div class="game-card breaker-card" id="select-breaker" role="button" aria-label="네온 브레이커 시작">
+          <div class="card-icon"><i class="fa-solid fa-cubes"></i></div>
+          <img src="breaker_preview.png" class="card-img" alt="Neon Breaker Preview">
+          <h2 class="card-title">Neon Breaker</h2>
+          <p class="card-desc">클래식 벽돌 깨기 게임을 현대적으로 각색했습니다. 아름다운 다층 네온 벽돌을 부수며 짜릿하게 튀는 입자 파편 이펙트와 레트로 8비트 튕김음을 만끽하세요.</p>
+          <button class="card-btn">Play Now</button>
+        </div>
       </div>
     </div>
 
@@ -235,6 +244,84 @@
       </main>
     </div>
 
+    <!-- ==================== 4. BREAKER SCREEN ==================== -->
+    <div id="breaker-screen" class="screen">
+      <!-- Game Navigation Bar -->
+      <div class="game-header-bar">
+        <div class="game-header-title" style="color: var(--color-l)"><i class="fa-solid fa-cubes"></i> Neon Breaker</div>
+        <button class="home-btn" id="breaker-home-btn"><i class="fa-solid fa-house"></i> Lobby</button>
+      </div>
+
+      <main class="runner-interface" style="grid-template-columns: minmax(320px, 400px) 220px; justify-content: center;">
+        <!-- Left Side Breaker Canvas (400x500) -->
+        <section class="runner-board-wrapper" id="breaker-wrapper" style="box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 123, 0, 0.15); border-color: rgba(255, 123, 0, 0.2); width:100%; max-width:400px;">
+          <canvas id="breaker-board" width="400" height="500" tabindex="0" style="display:block; width:100%; height:auto; background:rgba(8, 5, 15, 0.95); outline:none;"></canvas>
+          
+          <!-- Overlays -->
+          <div id="breaker-start-overlay" class="board-overlay active">
+            <div class="overlay-content">
+              <h2 class="overlay-title" style="background: linear-gradient(to right, var(--color-l), var(--color-o)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Neon Breaker</h2>
+              <p class="overlay-score">패들을 제어해 공을 튕겨 네온 벽돌을 모두 부수세요!</p>
+              <button id="breaker-start-btn" class="btn" style="background: linear-gradient(135deg, var(--color-l) 0%, #ff5500 100%); box-shadow: 0 4px 15px rgba(255, 123, 0, 0.3);">Start Break</button>
+            </div>
+          </div>
+
+          <div id="breaker-gameover-overlay" class="board-overlay">
+            <div class="overlay-content">
+              <h2 class="overlay-title game-over-title">Failed</h2>
+              <p class="overlay-score">최종 점수: <strong id="breaker-final-score">0</strong></p>
+              <button id="breaker-restart-btn" class="btn" style="background: linear-gradient(135deg, var(--color-l) 0%, #ff5500 100%);">Try Again</button>
+            </div>
+          </div>
+
+          <div id="breaker-clear-overlay" class="board-overlay">
+            <div class="overlay-content">
+              <h2 class="overlay-title" style="background: linear-gradient(to right, #00ff66, #00f0ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Stage Clear!</h2>
+              <p class="overlay-score" style="color:#00ff66; margin-bottom: 10px;">축하합니다! 완벽하게 클리어했습니다.</p>
+              <p class="overlay-score">최종 점수: <strong id="breaker-clear-score">0</strong></p>
+              <button id="breaker-clear-btn" class="btn" style="background: linear-gradient(135deg, #00ff66 0%, #00a844 100%); box-shadow: 0 4px 15px rgba(0, 255, 102, 0.3);">Play Again</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right Side Panel (Score & Controls) -->
+        <section class="side-panel">
+          <div class="panel-section">
+            <h2 class="panel-title">Game Info</h2>
+            <div style="width: 100%; display: flex; flex-direction: column; gap: 16px;">
+              <div>
+                <div class="panel-title" style="border:none; margin:0; padding:0; font-size:0.7rem;">Score</div>
+                <div id="breaker-score" class="value-display">0</div>
+              </div>
+              <div>
+                <div class="panel-title" style="border:none; margin:0; padding:0; font-size:0.7rem;">High Score</div>
+                <div id="breaker-high-score" class="value-display" style="color: var(--color-l); text-shadow: 0 0 10px rgba(255, 123, 0, 0.3);">0</div>
+              </div>
+              <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px;">
+                <div class="panel-title" style="border:none; margin:0; padding:0; font-size:0.7rem;">Lives</div>
+                <div id="breaker-lives" class="value-display" style="color: var(--color-z); text-shadow: 0 0 10px rgba(255, 0, 85, 0.3);">❤️ ❤️ ❤️</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <h2 class="panel-title">Controls</h2>
+            <div class="controls-guide">
+              <div class="control-item">
+                <span>패들 이동 (Move)</span>
+                <div>
+                  <span class="key-badge">←</span> <span class="key-badge">→</span>
+                </div>
+              </div>
+              <div class="control-item" style="border:none; padding-top:6px;">
+                <span style="color: var(--text-muted); font-size: 0.65rem; line-height: 1.3; display:block;">* 마우스 커서의 움직임으로도 패들이 유연하게 반응합니다.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
     <!-- Global Sound Toggle Control -->
     <div class="control-bar">
       <button id="mute-btn" class="icon-btn" title="전체 사운드 토글" aria-label="전체 사운드 토글">
@@ -252,6 +339,7 @@
   <script src="audio.js"></script>
   <script src="tetris.js"></script>
   <script src="runner.js"></script>
+  <script src="breaker.js"></script>
   <script src="platform.js"></script>
 </body>
 </html>

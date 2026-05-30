@@ -5,22 +5,26 @@
   const lobbyScreen = document.getElementById('lobby-screen');
   const tetrisScreen = document.getElementById('tetris-screen');
   const runnerScreen = document.getElementById('runner-screen');
+  const breakerScreen = document.getElementById('breaker-screen');
 
   // Trigger Cards
   const selectTetris = document.getElementById('select-tetris');
   const selectRunner = document.getElementById('select-runner');
+  const selectBreaker = document.getElementById('select-breaker');
 
   // Home buttons
   const tetrisHomeBtn = document.getElementById('tetris-home-btn');
   const runnerHomeBtn = document.getElementById('runner-home-btn');
+  const breakerHomeBtn = document.getElementById('breaker-home-btn');
 
   // Active game instances
   const tetrisBoard = document.getElementById('tetris-board');
   const runnerBoard = document.getElementById('runner-board');
+  const breakerBoard = document.getElementById('breaker-board');
 
   // Switch screens with sleek fade-in transition
   function switchScreen(targetScreen) {
-    const screens = [lobbyScreen, tetrisScreen, runnerScreen];
+    const screens = [lobbyScreen, tetrisScreen, runnerScreen, breakerScreen];
     
     screens.forEach(screen => {
       screen.classList.remove('active');
@@ -32,12 +36,15 @@
 
   // Lobby transitions
   function showLobby() {
-    // 1. Terminate running game engines immediately to free cycles and prevent audio loops
+    // Terminate running game engines immediately to free cycles and prevent audio loops
     if (window.TetrisGame && typeof window.TetrisGame.stop === 'function') {
       window.TetrisGame.stop();
     }
     if (window.NeonRunner && typeof window.NeonRunner.stop === 'function') {
       window.NeonRunner.stop();
+    }
+    if (window.NeonBreaker && typeof window.NeonBreaker.stop === 'function') {
+      window.NeonBreaker.stop();
     }
 
     switchScreen(lobbyScreen);
@@ -62,15 +69,26 @@
     }, 100);
   }
 
+  function launchBreaker() {
+    switchScreen(breakerScreen);
+    
+    // Focus board to start keyboard listening immediately
+    setTimeout(() => {
+      breakerBoard.focus();
+    }, 100);
+  }
+
   // Setup platform listeners
   function initPlatform() {
     // Selection Cards Click
     selectTetris.addEventListener('click', launchTetris);
     selectRunner.addEventListener('click', launchRunner);
+    selectBreaker.addEventListener('click', launchBreaker);
 
     // Home buttons
     tetrisHomeBtn.addEventListener('click', showLobby);
     runnerHomeBtn.addEventListener('click', showLobby);
+    breakerHomeBtn.addEventListener('click', showLobby);
 
     // Global sound toggle control sync with audioManager
     const globalMuteBtn = document.getElementById('mute-btn');
@@ -102,6 +120,9 @@
     // Sub-modules initialization triggers
     if (window.NeonRunner && typeof window.NeonRunner.init === 'function') {
       window.NeonRunner.init();
+    }
+    if (window.NeonBreaker && typeof window.NeonBreaker.init === 'function') {
+      window.NeonBreaker.init();
     }
   }
 

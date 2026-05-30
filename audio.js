@@ -144,6 +144,32 @@ class RetroAudioManager {
       }, idx * 80);
     });
   }
+
+  // --- Play Sound Effects for Neon Breaker ---
+  playPaddleHit() {
+    // Elastic square beep
+    this.playTone([260, 380], 0.08, 'triangle', 0.12);
+  }
+
+  playBrickBreak() {
+    // Sharp high frequency noise snap
+    this.playTone([700, 300, 100], 0.12, 'sawtooth', 0.1);
+  }
+
+  playLifeLoss() {
+    // Sad falling slide
+    this.playTone([330, 220, 110], 0.3, 'sawtooth', 0.15);
+  }
+
+  playGameClear() {
+    // Sparkly celebratory synth arpeggio
+    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98, 2093.00]; // C5, E5, G5, C6, E6, G6, C7
+    notes.forEach((freq, idx) => {
+      setTimeout(() => {
+        this.playTone(freq, 0.2, 'square', 0.06);
+      }, idx * 60);
+    });
+  }
 }
 
 // Global instance to use throughout the game
