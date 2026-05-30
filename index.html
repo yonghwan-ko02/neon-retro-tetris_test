@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TETRIS NEON - HTML5, CSS3, JavaScript를 사용해 제작한 모던하고 감각적인 다크 네온 테마 테리스 게임입니다. 홀드, 레벨업, 복고풍 사운드 이펙트까지 완벽하게 지원합니다.">
+  <meta name="keywords" content="테트리스, 테트리스 게임, Tetris, HTML5 테트리스, 무료 게임, JS 테트리스, 모던 테트리스, Retro Game">
+  <meta name="author" content="Antigravity Coding Assistant">
+  
+  <title>TETRIS NEON - Modern Retro Arcade</title>
+  
+  <!-- FontAwesome for Premium Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1 id="main-title">Tetris Neon</h1>
+      <div class="subtitle">Retro synth arcade</div>
+    </header>
+
+    <main class="game-interface">
+      <!-- Left Side Panel (Hold & Controls) -->
+      <section class="side-panel">
+        <div class="panel-section" id="hold-section">
+          <h2 class="panel-title">Hold</h2>
+          <!-- Hold piece canvas (4x4 blocks -> 96x96 px) -->
+          <canvas id="hold-canvas" class="sub-canvas" width="96" height="96"></canvas>
+        </div>
+        
+        <div class="panel-section" id="controls-section">
+          <h2 class="panel-title">Controls</h2>
+          <div class="controls-guide">
+            <div class="control-item">
+              <span>이동 (Move)</span>
+              <span class="key-badge">←</span> <span class="key-badge">→</span>
+            </div>
+            <div class="control-item">
+              <span>소프트 드롭</span>
+              <span class="key-badge">↓</span>
+            </div>
+            <div class="control-item">
+              <span>하드 드롭</span>
+              <span class="key-badge">Space</span>
+            </div>
+            <div class="control-item">
+              <span>회전 (Rotate)</span>
+              <span class="key-badge">↑</span>
+            </div>
+            <div class="control-item">
+              <span>홀드 (Hold)</span>
+              <span class="key-badge">C</span>
+            </div>
+            <div class="control-item">
+              <span>일시정지</span>
+              <span class="key-badge">P</span> <span class="key-badge">Esc</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Center Board Area -->
+      <section class="board-container" id="board-wrapper">
+        <!-- Main Canvas (10 columns x 20 rows, each cell is 30px -> 300x600 px) -->
+        <canvas id="tetris-board" width="300" height="600" tabindex="0"></canvas>
+        
+        <!-- Line clear screen flash -->
+        <div id="flash-overlay" class="line-clear-flash"></div>
+
+        <!-- Overlays -->
+        <!-- 1. Start Overlay -->
+        <div id="start-overlay" class="board-overlay active">
+          <div class="overlay-content">
+            <h2 class="overlay-title">Ready?</h2>
+            <p class="overlay-score">네온 비주얼과 오디오 합성음으로 즐기는 테트리스!</p>
+            <button id="start-btn" class="btn" aria-label="게임 시작">Start Game</button>
+          </div>
+        </div>
+
+        <!-- 2. Pause Overlay -->
+        <div id="pause-overlay" class="board-overlay">
+          <div class="overlay-content">
+            <h2 class="overlay-title">Paused</h2>
+            <p class="overlay-score">게임이 일시 정지되었습니다.</p>
+            <button id="resume-btn" class="btn" aria-label="게임 재개">Resume</button>
+          </div>
+        </div>
+
+        <!-- 3. Game Over Overlay -->
+        <div id="gameover-overlay" class="board-overlay">
+          <div class="overlay-content">
+            <h2 class="overlay-title game-over-title">Game Over</h2>
+            <p class="overlay-score">최종 점수: <strong id="final-score">0</strong></p>
+            <button id="restart-btn" class="btn" aria-label="다시 시작">Play Again</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Side Panel (Next & Score) -->
+      <section class="side-panel">
+        <div class="panel-section" id="next-section">
+          <h2 class="panel-title">Next</h2>
+          <!-- Next piece canvas (4x4 blocks -> 96x96 px) -->
+          <canvas id="next-canvas" class="sub-canvas" width="96" height="96"></canvas>
+        </div>
+
+        <div class="panel-section" id="score-section">
+          <h2 class="panel-title">Scoreboard</h2>
+          <div style="width: 100%; display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <div class="panel-title" style="border:none; margin:0; padding:0; font-size:0.7rem;">Score</div>
+              <div id="score" class="value-display">0</div>
+            </div>
+            <div>
+              <div class="panel-title" style="border:none; margin:0; padding:0; font-size:0.7rem;">High Score</div>
+              <div id="high-score" class="value-display high-score-val">0</div>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px;">
+              <div style="text-align: left;">
+                <div class="panel-title" style="border:none; margin:0; padding:0; font-size:0.7rem;">Level</div>
+                <div id="level" class="value-display" style="font-size: 1.3rem;">1</div>
+              </div>
+              <div style="text-align: right;">
+                <div class="panel-title" style="border:none; margin:0; padding:0; font-size:0.7rem;">Lines</div>
+                <div id="lines" class="value-display" style="font-size: 1.3rem;">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom Action Controls -->
+    <div class="control-bar">
+      <button id="mute-btn" class="icon-btn" title="음소거 토글" aria-label="음소거 토글">
+        <i class="fa-solid fa-volume-high" id="mute-icon"></i>
+      </button>
+      <button id="pause-toggle-btn" class="icon-btn" title="일시정지 토글" aria-label="일시정지 토글">
+        <i class="fa-solid fa-pause" id="pause-icon"></i>
+      </button>
+    </div>
+
+    <footer>
+      <span>TETRIS NEON &copy; 2026</span>
+      <span>Designed with <i class="fa-solid fa-heart" style="color: var(--color-z)"></i> by Antigravity AI</span>
+    </footer>
+  </div>
+
+  <!-- Game Scripts -->
+  <script src="audio.js"></script>
+  <script src="tetris.js"></script>
+</body>
+</html>
