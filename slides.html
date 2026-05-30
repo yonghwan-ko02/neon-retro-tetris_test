@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEON ARCADE - Platform Presentation</title>
+  
+  <!-- Google Fonts Outfit -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Reveal.js Core CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+  
+  <!-- Spotify Dark Immersive Theme Custom Override -->
+  <style>
+    :root {
+      --bg-primary: #121212;
+      --bg-surface: #181818;
+      --bg-surface-elevated: #1f1f1f;
+      --spotify-green: #1ed760;
+      --spotify-green-hover: #1db954;
+      --text-base: #ffffff;
+      --text-muted: #b3b3b3;
+      --border-gray: #4d4d4d;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-primary) !important;
+      color: var(--text-base) !important;
+      overflow: hidden;
+    }
+
+    .reveal {
+      font-family: 'Outfit', sans-serif !important;
+      background-color: var(--bg-primary) !important;
+      color: var(--text-base) !important;
+    }
+
+    /* Slides styling */
+    .reveal .slides section {
+      text-align: left;
+      padding: 20px 40px;
+      box-sizing: border-box;
+    }
+
+    /* Typography overrides */
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+      font-family: 'Outfit', sans-serif !important;
+      font-weight: 800 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 2px !important;
+      color: var(--text-base) !important;
+      margin-bottom: 20px !important;
+      text-shadow: none !important;
+    }
+
+    .reveal h1 {
+      font-size: 2.8rem !important;
+      line-height: 1.1 !important;
+    }
+
+    .reveal h2 {
+      font-size: 2rem !important;
+      border-bottom: 2px solid var(--spotify-green) !important;
+      padding-bottom: 10px !important;
+      display: inline-block !important;
+    }
+
+    .reveal h3 {
+      font-size: 1.4rem !important;
+      color: var(--spotify-green) !important;
+      font-weight: 600 !important;
+    }
+
+    .reveal p, .reveal li {
+      font-size: 0.95rem !important;
+      line-height: 1.6 !important;
+      color: var(--text-muted) !important;
+      font-weight: 400 !important;
+    }
+
+    .reveal strong {
+      color: var(--text-base) !important;
+      font-weight: 700 !important;
+    }
+
+    /* Spotify pill buttons */
+    .pill-badge {
+      display: inline-block;
+      background-color: var(--spotify-green);
+      color: #000000 !important;
+      font-weight: 700;
+      font-size: 0.65rem !important;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      padding: 6px 16px;
+      border-radius: 9999px; /* Pill */
+      margin-bottom: 25px;
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--bg-surface-elevated);
+      color: var(--text-base) !important;
+      font-weight: 700;
+      font-size: 0.75rem !important;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 10px 24px;
+      border-radius: 500px; /* Comfortable pill */
+      border: 1px solid var(--border-gray);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .pill-btn:hover {
+      background-color: var(--text-base);
+      color: var(--bg-primary) !important;
+      transform: translateY(-2px);
+    }
+
+    .pill-btn-green {
+      background-color: var(--spotify-green);
+      color: #000000 !important;
+      border: none;
+    }
+
+    .pill-btn-green:hover {
+      background-color: var(--spotify-green-hover);
+      color: #000000 !important;
+      box-shadow: 0 4px 15px rgba(30, 215, 96, 0.4);
+    }
+
+    /* Spotify style container cards */
+    .slide-card {
+      background-color: var(--bg-surface);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 20px;
+      box-shadow: rgba(0,0,0,0.4) 0px 8px 16px;
+      transition: background-color 0.2s;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .slide-card:hover {
+      background-color: var(--bg-surface-elevated);
+    }
+
+    /* Grid systems */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* Code highlighters */
+    .code-box {
+      background-color: #000000;
+      border-radius: 6px;
+      padding: 14px;
+      font-family: monospace;
+      font-size: 0.75rem !important;
+      color: #8ce8a5 !important;
+      border: 1px solid var(--border-gray);
+      margin-top: 15px;
+      overflow-x: auto;
+    }
+
+    /* Icons inside lists */
+    .icon-list {
+      list-style: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .icon-list li {
+      margin-bottom: 12px !important;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-list li i {
+      color: var(--spotify-green);
+      font-size: 1.1rem;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Navigation helper dots override */
+    .reveal .controls-arrow {
+      color: var(--spotify-green) !important;
+    }
+
+    .reveal .progress span {
+      background: var(--spotify-green) !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ==================== SLIDE 1: COVER (표지) ==================== -->
+      <section data-transition="fade">
+        <div class="pill-badge">Retro Arcade Hub</div>
+        <h1 style="margin-bottom: 10px !important;">Neon Arcade</h1>
+        <h3 style="color: var(--text-muted) !important; font-weight: 300 !important; margin-bottom: 40px !important;">
+          A Premium Web Retro Synth Arcade Platform
+        </h3>
+        
+        <div class="slide-card" style="display: inline-block; padding: 16px 24px;">
+          <p style="margin: 0; font-size: 0.85rem !important;">
+            <i class="fa-solid fa-circle-play" style="color: var(--spotify-green); margin-right: 8px;"></i>
+            스페이스바 또는 방향키로 발표 슬라이드를 넘기실 수 있습니다.
+          </p>
+        </div>
+      </section>
+
+      <!-- ==================== SLIDE 2: INTRODUCTION (플랫폼 개요) ==================== -->
+      <section data-transition="slide">
+        <h2>01. Platform Overview</h2>
+        <h3 style="margin-top: 10px;">세련된 다크 네온 속에 피어난 레트로 아케이드 명작</h3>
+        
+        <p style="margin-bottom: 20px;">
+          <strong>Neon Arcade</strong>는 브라우저만으로 가볍고 생생한 레트로 게임 경험을 선사하는 무의존성 게임 포탈 사이트입니다. 
+          스포티파이의 극도로 정갈한 <strong>Achromatic 다크 레이아웃</strong>을 기반으로 완성도 높게 제작되었습니다.
+        </p>
+
+        <div class="grid-3">
+          <div class="slide-card">
+            <h3><i class="fa-solid fa-shapes"></i> Tetris</h3>
+            <p style="font-size: 0.8rem !important; margin-top: 8px;">
+              7-Bag 균등 분배 룰과 SRS 회전 오차 보정을 갖추고 홀드 기능을 융합한 정밀한 클래식 테트리스.
+            </p>
+          </div>
+
+          <div class="slide-card">
+            <h3><i class="fa-solid fa-person-running"></i> Dino Runner</h3>
+            <p style="font-size: 0.8rem !important; margin-top: 8px;">
+              점프와 슬라이딩 이중 물리 장애물 회피를 도입하고 perspective 원근 배경이 빠르게 가속되는 횡스크롤 러너.
+            </p>
+          </div>
+
+          <div class="slide-card">
+            <h3><i class="fa-solid fa-cubes"></i> Brick Breaker</h3>
+            <p style="font-size: 0.8rem !important; margin-top: 8px;">
+              패들 충돌부 세분화 기하 반사각을 탑재하고 격파 시 네온 파편 파티클이 사방으로 터지는 타격감의 벽돌깨기.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SLIDE 3: SYSTEM ARCHITECTURE (시스템 설계) ==================== -->
+      <section data-transition="convex">
+        <h2>02. Architecture Map</h2>
+        <h3>유기적으로 설계된 바닐라 JS 독립 구조</h3>
+
+        <div class="grid-2" style="margin-top: 20px;">
+          <div>
+            <p>
+              웹 프레임워크나 복잡한 빌드 도구의 의존성 부하를 걷어낸 **순수 브라우저 API 설계**입니다. 
+              각 컴포넌트는 단방향 제어 흐름 하에 연동됩니다.
+            </p>
+            <ul class="icon-list" style="margin-top: 15px !important;">
+              <li><i class="fa-solid fa-network-wired"></i> <strong>platform.js</strong>: 각 독립 게임의 루프 교대 및 Home 리소스 soft-kill 총괄</li>
+              <li><i class="fa-solid fa-music"></i> <strong>audio.js</strong>: 8비트 주파수를 계산하는 합성 신디사이저</li>
+              <li><i class="fa-solid fa-hard-drive"></i> <strong>LocalStorage</strong>: 게임별 스코어 영구 보존</li>
+            </ul>
+          </div>
+
+          <div class="slide-card" style="padding: 16px;">
+            <p style="font-size: 0.75rem !important; margin-bottom: 8px; color: var(--spotify-green);"><strong>Lobby Navigation Flow</strong></p>
+            <div style="border-left: 2px solid var(--spotify-green); padding-left: 15px; margin-left: 5px;">
+              <p style="font-size: 0.75rem !important; margin: 4px 0;"><strong>1. Lobby Entry</strong>: index.html 로드 및 mute 싱크</p>
+              <p style="font-size: 0.75rem !important; margin: 4px 0;"><strong>2. Game Selection</strong>: select-card 클릭 시 active 스위칭</p>
+              <p style="font-size: 0.75rem !important; margin: 4px 0;"><strong>3. Canvas Focus</strong>: 즉각 키보드 입력을 위한 자동 포커스</p>
+              <p style="font-size: 0.75rem !important; margin: 4px 0;"><strong>4. Lobby Return</strong>: <code>stop()</code> 호출하여 CPU 연산 릴리즈</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SLIDE 4: CHALLENGE - SYNTH AUDIO (효과음 합성) ==================== -->
+      <section data-transition="slide">
+        <h2>03. Web Audio Synth</h2>
+        <h3>효과음 에셋 제로 - 실시간 8비트 오디오 신디사이징</h3>
+
+        <div class="grid-2">
+          <div>
+            <p>
+              외부 대용량 오디오 파일을 다운로드하고 프리로드하는 부하와 재생 랙을 제거하기 위해, 
+              웹 브라우저의 내장 소리 발생기인 **Web Audio API**를 사용해 실시간 파형을 연주합니다.
+            </p>
+            <p style="margin-top: 10px;">
+              <code>OscillatorNode</code>의 톱니파(sawtooth), 삼각파(triangle)를 조합하고, 잔향을 위해 
+              수학적 지수 볼륨 감쇄(Envelope)를 적용하여 정갈하고 따뜻한 8비트 아날로그 효과음을 선사합니다.
+            </p>
+          </div>
+
+          <div class="slide-card">
+            <h3>Brick Break Synth Code</h3>
+            <div class="code-box">
+playBrickBreak() {
+  // Sharp high frequency noise snap
+  this.playTone([700, 300, 100], 0.12, 'sawtooth', 0.1);
+}
+
+playTone(freqs, duration, type, volume) {
+  const osc = this.ctx.createOscillator();
+  const gain = this.ctx.createGain();
+  osc.type = type;
+  // exponential volume decay envelope
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+  osc.connect(gain);
+  gain.connect(this.ctx.destination);
+  osc.start(now);
+}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SLIDE 5: CHALLENGE - ADVANCED PHYSICS (고급 물리) ==================== -->
+      <section data-transition="zoom">
+        <h2>04. Advanced Physics</h2>
+        <h3>조작의 깊이를 선사하는 고해상도 물리 수학식</h3>
+        
+        <div class="grid-2">
+          <div class="slide-card">
+            <h3>패들 오프셋 반사각 기하학</h3>
+            <p style="font-size: 0.8rem !important; margin-top: 8px;">
+              공이 패들의 중앙에 맞았을 때는 일직선 위로 가깝게 튕겨 나가고, 
+              가장자리에 비껴 맞을수록 날카로운 수평 각도로 꺾여 가속되도록 충돌 비율 반사 각도 벡터 수식을 구현했습니다.
+            </p>
+            <div class="code-box" style="margin-top: 8px;">
+const hitPoint = (ball.x - (pad.x + pad.w/2)) / (pad.w/2);
+const bounceAngle = hitPoint * (Math.PI / 3.2);
+ball.dx = Math.sin(bounceAngle) * currentSpeed;
+ball.dy = -Math.cos(bounceAngle) * currentSpeed;
+            </div>
+          </div>
+
+          <div class="slide-card">
+            <h3>네온 파편 입자 시스템 (Shard Emitter)</h3>
+            <p style="font-size: 0.8rem !important; margin-top: 8px;">
+              벽돌 격파 시 생성되는 10여 개의 파편 입자가 중력 가속도를 받으며 흩날리는 Emitter 모듈 설계. 
+              프레임 델타타임 기준 감쇄(decay) 및 즉각 배열 소멸(splice) 처리로 프레임 랙을 방지했습니다.
+            </p>
+            <ul class="icon-list" style="margin-top: 10px !important; font-size: 0.8rem !important;">
+              <li><i class="fa-solid fa-play" style="font-size: 0.8rem;"></i> 중력값: <code>p.vy += 0.1</code></li>
+              <li><i class="fa-solid fa-play" style="font-size: 0.8rem;"></i> 투명감 쇠퇴: <code>p.alpha -= decay</code></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SLIDE 6: CHALLENGE - OPTIMIZATION (최적화) ==================== -->
+      <section data-transition="slide">
+        <h2>05. CPU Soft-Killing</h2>
+        <h3>지속 가능한 플랫폼을 위한 완전한 메모리 릴리즈</h3>
+
+        <div class="grid-2" style="margin-top: 20px;">
+          <div>
+            <p>
+              단일 웹페이지 상에서 여러 스크린을 숨기고 노출하는 라우팅 구조에서, 
+              이동 후에도 게임 루프가 중단되지 않고 백그라운드에서 CPU 연산을 가하는 심각한 리소스 누수(Memory Leak) 현상이 발생했습니다.
+            </p>
+            <p style="margin-top: 10px;">
+              각 게임 코어에 **라이프사이클 <code>stop()</code> 메소드**를 바인딩하여, 로비 복귀와 동시에 
+              <code>cancelAnimationFrame</code>을 걸어 게임 루프 스케줄러를 깨끗하게 강제 제거하고 화면을 리셋함으로써 **CPU 점유율을 0%**로 완벽하게 안정화시켰습니다.
+            </p>
+          </div>
+
+          <div class="slide-card">
+            <h3>Lobby Screen Return Sequence</h3>
+            <ul class="icon-list" style="font-size: 0.85rem !important;">
+              <li><i class="fa-solid fa-chevron-right"></i> <strong>Lobby Button Click</strong>: platform.js 이벤트 가로챔</li>
+              <li><i class="fa-solid fa-chevron-right"></i> <strong>Stop Call</strong>: <code>window.NeonBreaker.stop()</code> 등 호출</li>
+              <li><i class="fa-solid fa-chevron-right"></i> <strong>Loop Kill</strong>: active flag = false, cancelAnimationFrame 실행</li>
+              <li><i class="fa-solid fa-chevron-right"></i> <strong>Clear Buffer</strong>: 캔버스를 깨끗하게 비우고 메트릭스 리셋</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SLIDE 7: CONCLUSION (결론 및 배포) ==================== -->
+      <section data-transition="fade">
+        <div class="pill-badge" style="background-color: var(--spotify-green);">Agile Delivery</div>
+        <h2>06. Conclusion</h2>
+        <h3 style="margin-top: 10px;">경량 배포의 이점 극대화</h3>
+
+        <div class="slide-card">
+          <ul class="icon-list">
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <span><strong>무의존성 극도의 경량화</strong>: 프레임워크나 외부 에셋 로더가 없어, 모바일/PC 상관없이 페이지 로딩 속도가 0.1초 미만에 불과합니다.</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <span><strong>LocalStorage 영구 통합</strong>: 최고 기록 및 사운드 Mute 설정이 유저 브라우저와 자동 동기화됩니다.</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <span><strong>GitHub 원격 푸시 완수</strong>: 버전 관리(Commit)를 확실히 세팅하여 원격 저장소 main 브랜치 배포를 완전히 마쳤습니다.</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div style="margin-top: 30px; text-align: center;">
+          <a href="index.html" class="pill-btn pill-btn-green"><i class="fa-solid fa-gamepad"></i> Play Arcade Now</a>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Reveal.js Core Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.js"></script>
+  
+  <script>
+    // Initialize Reveal.js presentation with Spotify Green & Cube Transitions
+    Reveal.initialize({
+      hash: true,
+      controls: true,
+      progress: true,
+      center: true,
+      transition: 'slide', // none/fade/slide/convex/concave/zoom
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      width: 960,
+      height: 700,
+      margin: 0.1,
+      minScale: 0.2,
+      maxScale: 2.0
+    });
+  </script>
+</body>
+</html>
