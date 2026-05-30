@@ -1,7 +1,13 @@
 # 🕹️ NEON ARCADE - Retro Game Platform
 
-> **HTML5, CSS3, Vanilla JavaScript**로 구현된 고품질 다크 네온 테마의 레트로 아케이드 게임 플랫폼입니다.
+[![Play Arcade](https://img.shields.io/badge/PLAY-NEON_ARCADE-1ed760?style=for-the-badge&logo=google-play&logoColor=black)](https://yonghwan-ko02.github.io/neon-retro-tetris_test/)
+[![View Slideshow](https://img.shields.io/badge/VIEW-SLIDESHOW-00f0ff?style=for-the-badge&logo=microsoft-powerpoint&logoColor=black)](https://yonghwan-ko02.github.io/neon-retro-tetris_test/slides.html)
+
+> **HTML5, CSS3, Vanilla JavaScript**로 구현된 고품질 다크 네온 테마의 레트로 아케이드 게임 플랫폼입니다.  
 > 하나의 아름다운 네온 로비 인터페이스 안에서 **테트리스(Tetris)**, **네온 러너(Neon Runner)**, **네온 브레이커(Neon Breaker)** 세 가지 명작 아케이드 게임을 선택해 즉석에서 플레이할 수 있습니다.
+
+* 🚀 **[게임 플랫폼 라이브 서버 바로가기]**: [https://yonghwan-ko02.github.io/neon-retro-tetris_test/](https://yonghwan-ko02.github.io/neon-retro-tetris_test/)
+* 📊 **[아키텍처/기획 발표 슬라이드 바로가기]**: [https://yonghwan-ko02.github.io/neon-retro-tetris_test/slides.html](https://yonghwan-ko02.github.io/neon-retro-tetris_test/slides.html)
 
 ---
 
