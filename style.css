@@ -13,14 +13,14 @@
   --glass-border: rgba(255, 255, 255, 0.07);
   --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   
-  /* Tetromino Neon Colors */
-  --color-i: #00f0ff;
-  --color-o: #ffe600;
-  --color-t: #b5179e;
-  --color-s: #38b000;
-  --color-z: #ff0055;
-  --color-j: #0072ff;
-  --color-l: #ff7b00;
+  /* Neon Accent Colors */
+  --color-i: #00f0ff; /* Cyan */
+  --color-o: #ffe600; /* Yellow */
+  --color-t: #b5179e; /* Purple */
+  --color-s: #38b000; /* Green */
+  --color-z: #ff0055; /* Pink/Red */
+  --color-j: #0072ff; /* Blue */
+  --color-l: #ff7b00; /* Orange */
 }
 
 * {
@@ -74,7 +74,7 @@ body::after {
   align-items: center;
   gap: 20px;
   width: 100%;
-  max-width: 900px;
+  max-width: 950px;
   padding: 20px;
   z-index: 1;
 }
@@ -105,7 +105,233 @@ h1 {
   text-transform: uppercase;
 }
 
-/* Game Interface Grid Layout */
+/* Multi-Screen Structure */
+.screen {
+  display: none;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.screen.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- LOBBY SCREEN (GAME SELECTION) --- */
+#lobby-screen {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.lobby-title {
+  text-align: center;
+  font-size: 1.4rem;
+  color: var(--text-muted);
+  margin-bottom: 30px;
+  font-weight: 400;
+  letter-spacing: 2px;
+}
+
+.game-selection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .game-selection {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.game-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: var(--glass-glow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Accent neon borders for cards */
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  transition: all 0.3s;
+}
+
+.game-card.tetris-card::before {
+  background: linear-gradient(90deg, var(--color-z), var(--color-t));
+}
+
+.game-card.runner-card::before {
+  background: linear-gradient(90deg, var(--color-i), var(--color-j));
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  transition: transform 0.3s;
+}
+
+.game-card.tetris-card .card-icon {
+  color: var(--color-z);
+  text-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+}
+
+.game-card.runner-card .card-icon {
+  color: var(--color-i);
+  text-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+.card-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.game-card.tetris-card .card-title {
+  background: linear-gradient(135deg, #ff0055, #b5179e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.game-card.runner-card .card-title {
+  background: linear-gradient(135deg, #00f0ff, #0072ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 24px;
+  flex-grow: 1;
+}
+
+.game-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.game-card.tetris-card:hover {
+  box-shadow: 0 15px 35px rgba(181, 23, 158, 0.2), 0 0 20px rgba(255, 0, 85, 0.1);
+}
+
+.game-card.runner-card:hover {
+  box-shadow: 0 15px 35px rgba(0, 114, 255, 0.2), 0 0 20px rgba(0, 240, 255, 0.1);
+}
+
+.game-card:hover .card-icon {
+  transform: scale(1.15) rotate(3deg);
+}
+
+/* Play Now button inside card */
+.card-btn {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.game-card.tetris-card .card-btn {
+  background: rgba(181, 23, 158, 0.15);
+  border: 1px solid rgba(181, 23, 158, 0.3);
+}
+
+.game-card.tetris-card:hover .card-btn {
+  background: linear-gradient(135deg, #ff0055, #b5179e);
+  box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4);
+}
+
+.game-card.runner-card .card-btn {
+  background: rgba(0, 114, 255, 0.15);
+  border: 1px solid rgba(0, 114, 255, 0.3);
+}
+
+.game-card.runner-card:hover .card-btn {
+  background: linear-gradient(135deg, #00f0ff, #0072ff);
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.4);
+}
+
+/* Header bar for game screens */
+.game-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 10px 20px;
+  box-shadow: var(--glass-glow);
+  backdrop-filter: blur(8px);
+}
+
+.game-header-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.game-header-title i {
+  margin-right: 8px;
+}
+
+.home-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.home-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+/* --- TETRIS SCREEN SPECIFICS --- */
 .game-interface {
   display: grid;
   grid-template-columns: 180px 320px 180px;
@@ -187,6 +413,11 @@ h1 {
   text-shadow: 0 0 10px rgba(255, 230, 0, 0.3);
 }
 
+.runner-high-score-val {
+  color: var(--color-i);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
 /* Preview / Hold Canvas Styles */
 .sub-canvas {
   background: rgba(0, 0, 0, 0.3);
@@ -266,6 +497,12 @@ h1 {
   -webkit-text-fill-color: transparent;
 }
 
+.overlay-title.runner-title {
+  background: linear-gradient(to right, var(--color-i), var(--color-j));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .overlay-score {
   font-size: 1.1rem;
   color: var(--text-muted);
@@ -275,6 +512,41 @@ h1 {
 .overlay-score strong {
   color: #fff;
   font-size: 1.5rem;
+}
+
+/* --- RUNNER SCREEN SPECIFICS --- */
+.runner-interface {
+  display: grid;
+  grid-template-columns: 640px 220px;
+  gap: 24px;
+  justify-content: center;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .runner-interface {
+    grid-template-columns: 1fr;
+  }
+}
+
+.runner-board-wrapper {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 240, 255, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  width: 100%;
+}
+
+#runner-board {
+  display: block;
+  background: rgba(8, 5, 15, 0.95);
+  outline: none;
+  width: 100%;
+  height: auto;
 }
 
 /* Custom Styled Buttons */

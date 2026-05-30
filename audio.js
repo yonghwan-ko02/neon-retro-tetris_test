@@ -63,39 +63,32 @@ class RetroAudioManager {
     }
   }
 
-  // Play Sound Effects
+  // Play Sound Effects for Tetris
   playMove() {
-    // Short high beep
     this.playTone([200, 150], 0.05, 'triangle', 0.15);
   }
 
   playRotate() {
-    // Medium pitch quick sweep
     this.playTone([300, 450], 0.08, 'triangle', 0.15);
   }
 
   playDrop() {
-    // Low frequency thud
     this.playTone([100, 60], 0.12, 'sawtooth', 0.2);
   }
 
   playHardDrop() {
-    // Heavy low frequency slide
     this.playTone([120, 80, 40], 0.2, 'sawtooth', 0.25);
   }
 
   playHold() {
-    // Pleasant double beep
     this.playTone([400, 600], 0.12, 'square', 0.08);
   }
 
   playLineClear(linesCount) {
     const duration = 0.35;
-    const now = this.ctx ? this.ctx.currentTime : 0;
     
     if (linesCount === 4) {
       // Epic Tetris Line Clear sound (4 lines)
-      // Play a major 7th chord arpeggio
       const notes = [261.63, 329.63, 392.00, 493.88, 523.25]; // C4, E4, G4, B4, C5
       notes.forEach((freq, idx) => {
         setTimeout(() => {
@@ -114,7 +107,6 @@ class RetroAudioManager {
   }
 
   playLevelUp() {
-    // Celebratory ascending synth
     const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50]; // C4, E4, G4, C5, E5, G5, C6
     notes.forEach((freq, idx) => {
       setTimeout(() => {
@@ -124,12 +116,32 @@ class RetroAudioManager {
   }
 
   playGameOver() {
-    // Sad descending arpeggio
     const notes = [392.00, 311.13, 261.63, 196.00, 155.56, 130.81]; // G4, Eb4, C4, G3, Eb3, C3
     notes.forEach((freq, idx) => {
       setTimeout(() => {
         this.playTone(freq, 0.3, 'sawtooth', 0.12);
       }, idx * 120);
+    });
+  }
+
+  // --- Play Sound Effects for Neon Runner ---
+  playJump() {
+    // Retro upward slide
+    this.playTone([150, 350, 600], 0.15, 'square', 0.08);
+  }
+
+  playCrash() {
+    // Heavy low noise distortion sweep
+    this.playTone([180, 100, 40], 0.35, 'sawtooth', 0.25);
+  }
+
+  playMilestone() {
+    // High double beep cheer
+    const notes = [587.33, 880.00]; // D5, A5
+    notes.forEach((freq, idx) => {
+      setTimeout(() => {
+        this.playTone(freq, 0.15, 'square', 0.06);
+      }, idx * 80);
     });
   }
 }

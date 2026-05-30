@@ -200,6 +200,7 @@ function playerRotate(dir) {
   audioManager.playRotate();
 }
 
+// Left/Right move
 function playerMove(dir) {
   if (gameOver || isPaused || !gameStarted) return;
 
@@ -211,6 +212,7 @@ function playerMove(dir) {
   }
 }
 
+// Soft Drop
 function playerDrop() {
   if (gameOver || isPaused || !gameStarted) return;
 
@@ -223,6 +225,7 @@ function playerDrop() {
   }
 }
 
+// Hard Drop
 function playerHardDrop() {
   if (gameOver || isPaused || !gameStarted) return;
 
@@ -280,13 +283,6 @@ function playerHold() {
 // Lock the piece to the board, trigger line clears, reset hold limit
 function lockPiece() {
   merge(board, currentPiece);
-  
-  // Audio indicator for piece locking down
-  if (currentPiece.pos.y >= 0) {
-    // If not hard-dropped already (which triggers sound separately)
-    // we play standard soft drop impact sound
-  }
-
   clearLines();
   
   // Setup next tetromino
@@ -327,10 +323,9 @@ function clearLines() {
       }
     }
 
-    // Row is full, splice it out and insert empty row at top
     const row = board.splice(y, 1)[0].fill(0);
     board.unshift(row);
-    y++; // check same row index again because lines shifted down
+    y++; 
     clearedCount++;
   }
 
@@ -338,23 +333,19 @@ function clearLines() {
     triggerFlash();
     audioManager.playLineClear(clearedCount);
 
-    // Tetris scoring formula
     const baseScores = [0, 100, 300, 500, 800];
     score += baseScores[clearedCount] * level;
     lines += clearedCount;
     
-    // Level up calculation: every 10 lines cleared
     const targetLevel = Math.floor(lines / 10) + 1;
     if (targetLevel > level) {
       level = targetLevel;
       audioManager.playLevelUp();
-      // Increase drop speed exponentially
       dropInterval = Math.max(80, 1000 - (level - 1) * 90);
     }
 
     updateUI();
     
-    // Save high score if beaten
     if (score > highScore) {
       highScore = score;
       localStorage.setItem('tetris_high_score', highScore);
@@ -363,7 +354,7 @@ function clearLines() {
   }
 }
 
-// Ghost Piece calculation: detects where current piece will land
+// Ghost Piece calculation
 function getGhostPosition() {
   const ghost = {
     matrix: currentPiece.matrix,
@@ -380,7 +371,6 @@ function getGhostPosition() {
 
 // Graphics rendering
 function draw() {
-  // Clear canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Draw background grid lines (sleek neon wireframe lines)
@@ -404,16 +394,13 @@ function draw() {
 
   // Draw ghost piece and falling piece if active
   if (gameStarted && !gameOver && currentPiece) {
-    // 1. Draw Ghost Piece (Pre-landing indicator)
     const ghostY = getGhostPosition();
     drawGhost(currentPiece.matrix, { x: currentPiece.pos.x, y: ghostY }, currentPiece.typeId);
-
-    // 2. Draw Active Falling Piece
     drawMatrix(currentPiece.matrix, currentPiece.pos);
   }
 }
 
-// Helper to draw matrices (either standard blocks or neon styled blocks)
+// Helper to draw matrices
 function drawMatrix(matrix, offset, isGhost = false, ghostTypeId = 0) {
   matrix.forEach((row, r) => {
     row.forEach((value, c) => {
@@ -421,7 +408,6 @@ function drawMatrix(matrix, offset, isGhost = false, ghostTypeId = 0) {
         const x = (c + offset.x) * BLOCK_SIZE;
         const y = (r + offset.y) * BLOCK_SIZE;
         
-        // Don't draw block if it is spawning above view boundary
         if (y < 0) return;
 
         const colorVal = COLORS[value];
@@ -447,41 +433,32 @@ function drawGhost(matrix, offset, typeId) {
   });
 }
 
-// Specialized Block Drawing Engine (Neon Glow, Inset Shadows)
+// Specialized Block Drawing Engine
 function drawNeonBlock(context, x, y, size, colorHex, isGhost = false) {
   context.save();
   
   if (isGhost) {
-    // Semi-transparent hollow blocks for ghost preview
     context.strokeStyle = colorHex;
     context.lineWidth = 2;
     context.fillStyle = 'rgba(0, 0, 0, 0.4)';
     
-    // Draw neon soft outer glow for ghost
     context.shadowColor = colorHex;
     context.shadowBlur = 6;
     
-    // Rounded rect blocks
     roundRect(context, x + 2, y + 2, size - 4, size - 4, 4);
     context.fill();
     context.stroke();
   } else {
-    // Full saturated modern neon blocks
     context.fillStyle = colorHex;
-    
-    // Setup rich shadows (Glow effect)
     context.shadowColor = colorHex;
     context.shadowBlur = 8;
     
-    // Draw base rounded rectangle block
     roundRect(context, x + 1, y + 1, size - 2, size - 2, 5);
     context.fill();
     
-    // 3D inner bevel effect for high-fidelity aesthetics
-    context.shadowBlur = 0; // turn off shadow for interior bevel
-    context.fillStyle = 'rgba(255, 255, 255, 0.25)'; // highlights
+    context.shadowBlur = 0; 
+    context.fillStyle = 'rgba(255, 255, 255, 0.25)'; 
     
-    // Draw top/left highlight highlights
     context.beginPath();
     context.moveTo(x + 1, y + 1);
     context.lineTo(x + size - 1, y + 1);
@@ -492,7 +469,6 @@ function drawNeonBlock(context, x, y, size, colorHex, isGhost = false) {
     context.closePath();
     context.fill();
     
-    // Draw bottom/right shadow accents
     context.fillStyle = 'rgba(0, 0, 0, 0.3)';
     context.beginPath();
     context.moveTo(x + size - 1, y + 1);
@@ -530,7 +506,6 @@ function drawSubCanvas(canvasObj, subCtx, pieceObj) {
 
   const m = pieceObj.matrix;
   
-  // Calculate bounding box of tetromino matrix to center it on the smaller preview panels
   let minX = m[0].length, maxX = 0;
   let minY = m.length, maxY = 0;
   let hasContent = false;
@@ -551,9 +526,8 @@ function drawSubCanvas(canvasObj, subCtx, pieceObj) {
 
   const blockW = maxX - minX + 1;
   const blockH = maxY - minY + 1;
-  const size = 18; // scaled size for small panels
+  const size = 18;
 
-  // Offset logic to center tetromino visually
   const offsetX = (canvasObj.width - blockW * size) / 2 - minX * size;
   const offsetY = (canvasObj.height - blockH * size) / 2 - minY * size;
 
@@ -578,9 +552,8 @@ function updateUI() {
 
 // Game State Operations
 function startGame() {
-  audioManager.init(); // enable synth audio context
+  audioManager.init(); 
   
-  // Reset fields
   board = createMatrix(COLS, ROWS);
   score = 0;
   level = 1;
@@ -595,29 +568,22 @@ function startGame() {
   holdPiece = null;
   hasHeld = false;
 
-  // Spawns
   currentPiece = generateNextPiece();
   nextPiece = generateNextPiece();
   spawnPiece(currentPiece);
   
   updateUI();
   
-  // Reset overlay visual modes
   startOverlay.classList.remove('active');
   pauseOverlay.classList.remove('active');
   gameoverOverlay.classList.remove('active');
   
-  // Render subdisplays
   drawSubCanvas(nextCanvas, nextCtx, nextPiece);
   drawSubCanvas(holdCanvas, holdCtx, holdPiece);
   
-  // Set UI Buttons state
   pauseIcon.className = "fa-solid fa-pause";
-  
-  // Focus main board
   canvas.focus();
   
-  // Kickstart requestAnimationFrame game loop
   lastTime = performance.now();
   requestAnimationFrame(gameLoop);
 }
@@ -639,7 +605,6 @@ function togglePause() {
   } else {
     pauseOverlay.classList.remove('active');
     pauseIcon.className = "fa-solid fa-pause";
-    // Reset timers to prevent huge time deltas while paused
     lastTime = performance.now();
     canvas.focus();
     requestAnimationFrame(gameLoop);
@@ -664,47 +629,23 @@ function gameLoop(time = 0) {
 
 // User Event Listeners Setup
 function initEventListeners() {
-  // Click Handlers
   startBtn.addEventListener('click', startGame);
   resumeBtn.addEventListener('click', togglePause);
   restartBtn.addEventListener('click', startGame);
-  
-  pauseToggleBtn.addEventListener('click', () => {
-    if (!gameStarted && !gameOver) {
-      startGame();
-    } else {
-      togglePause();
-    }
-  });
-
-  // Sound toggle button click handler
-  muteBtn.addEventListener('click', () => {
-    const isMuted = audioManager.toggleMute();
-    updateMuteUI(isMuted);
-  });
 
   // Key Down Events
   window.addEventListener('keydown', (event) => {
-    // Prevent default scrolling for arrows and space
+    // Prevent default scrolling
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(event.key)) {
       if (document.activeElement === canvas || document.activeElement === document.body) {
-        event.preventDefault();
+        const screen = document.getElementById('tetris-screen');
+        if (screen.classList.contains('active')) {
+          event.preventDefault();
+        }
       }
     }
 
-    if (!gameStarted) {
-      if (event.key === 'Enter' || event.key === ' ') {
-        startGame();
-      }
-      return;
-    }
-
-    if (gameOver) {
-      if (event.key === 'Enter' || event.key === ' ') {
-        startGame();
-      }
-      return;
-    }
+    if (!gameStarted || gameOver) return;
 
     switch (event.key) {
       case 'ArrowLeft':
@@ -725,9 +666,9 @@ function initEventListeners() {
       case 'ArrowUp':
       case 'w':
       case 'W':
-        playerRotate(1); // Clockwise
+        playerRotate(1); 
         break;
-      case ' ': // Spacebar
+      case ' ': 
         playerHardDrop();
         break;
       case 'c':
@@ -742,7 +683,6 @@ function initEventListeners() {
     }
   });
 
-  // Ensure gameboard stays focused when clicked inside
   canvas.addEventListener('click', () => {
     if (gameStarted && !isPaused && !gameOver) {
       canvas.focus();
@@ -762,14 +702,28 @@ function updateMuteUI(muted) {
 
 // Initial script bootstrap
 function init() {
-  // Pre-initialize sound control icon based on past choice
   updateMuteUI(audioManager.isMuted);
-  
-  // Render empty grid initial placeholder
   draw();
-  
   initEventListeners();
 }
 
 // Start everything up
 window.addEventListener('DOMContentLoaded', init);
+
+// Expose controller methods to window object for lobby platform control
+window.TetrisGame = {
+  init: init,
+  stop: function() {
+    gameStarted = false;
+    gameOver = false;
+    isPaused = false;
+    startOverlay.classList.add('active');
+    pauseOverlay.classList.remove('active');
+    gameoverOverlay.classList.remove('active');
+    board = createMatrix(COLS, ROWS);
+    holdPiece = null;
+    draw();
+    drawSubCanvas(nextCanvas, nextCtx, null);
+    drawSubCanvas(holdCanvas, holdCtx, null);
+  }
+};
